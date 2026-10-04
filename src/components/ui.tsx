@@ -49,7 +49,16 @@ export function Txt({
 export function Card({ children, style, pad = 16 }: { children: ReactNode; style?: StyleProp<ViewStyle>; pad?: number }) {
   const th = useTheme();
   return (
-    <View style={[{ backgroundColor: th.sunk, borderRadius: 24, padding: pad }, style]}>
+    <View
+      style={[
+        {
+          backgroundColor: th.card, borderRadius: 22, padding: pad,
+          borderWidth: 1.5, borderBottomWidth: 4, borderColor: th.border,
+          shadowColor: '#1C2A3A', shadowOpacity: th.isDark ? 0 : 0.06, shadowRadius: 12, shadowOffset: { width: 0, height: 4 }, elevation: th.isDark ? 0 : 2,
+        },
+        style,
+      ]}
+    >
       {children}
     </View>
   );

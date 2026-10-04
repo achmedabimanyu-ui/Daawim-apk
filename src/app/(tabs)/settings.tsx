@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import { Camera, Check, Download, MapPin, RotateCcw, Upload } from 'lucide-react-native';
+import { Camera, Check, ChevronRight, Download, ListChecks, MapPin, RotateCcw, Upload } from 'lucide-react-native';
 import { useState, type ReactNode } from 'react';
 import { Alert, Image, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -74,6 +74,16 @@ export default function SettingsScreen() {
             options={[{ key: 'muslim', label: t('muslim') }, { key: 'muslimah', label: t('muslimah') }]}
             value={settings.gender}
             onChange={(g) => setSettings({ gender: g })}
+          />
+        </Card>
+
+        <SectionTitle>{t('habits')}</SectionTitle>
+        <Card pad={12}>
+          <Row
+            icon={<ListChecks color={th.accent.main} size={20} strokeWidth={2.6} />}
+            label={t('manageHabits')}
+            onPress={() => router.push('/manage')}
+            right={<ChevronRight color={th.faint} size={18} />}
           />
         </Card>
 

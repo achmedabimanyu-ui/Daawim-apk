@@ -7,4 +7,4 @@ export const habitName = (h: Habit, lang: Lang) =>
 export const categoryName = (c: Category, lang: Lang) => (c.builtin ? categoryNames[c.builtin][lang] : c.name);
 
 export const unitLabel = (unit: string, t: (k: keyof Dict) => string) =>
-  ['pages', 'verses', 'times', 'minutes'].includes(unit) ? t(unit as keyof Dict) : unit;
+  ['pages', 'juz', 'surah', 'verses', 'times', 'minutes'].includes(unit) ? t(unit as keyof Dict) : unit;

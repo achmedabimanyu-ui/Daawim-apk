@@ -49,10 +49,11 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
       onPress={() => onOpen(habit)}
       style={{
         flexDirection: rtl ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 12,
-        backgroundColor: done ? th.accent.soft : th.sunk, borderRadius: 20, marginBottom: 8,
+        backgroundColor: done ? th.accent.soft : th.card, borderRadius: 20, marginBottom: 10,
+        borderWidth: 1.5, borderBottomWidth: 4, borderColor: done ? th.accent.main : th.border,
       }}
     >
-      <View style={{ width: 38, height: 38, borderRadius: 12, backgroundColor: done ? th.accent.main : th.card, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ width: 38, height: 38, borderRadius: 12, backgroundColor: done ? th.accent.main : th.accent.soft, alignItems: 'center', justifyContent: 'center' }}>
         <HabitIcon name={habit.icon} size={19} color={done ? '#fff' : th.accent.main} />
       </View>
       <View style={{ flex: 1 }}>

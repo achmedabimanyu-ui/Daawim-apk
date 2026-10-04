@@ -109,7 +109,7 @@ export default function HabitEditor() {
             <View style={{ flex: 2 }}>
               <Label>{t('unit')}</Label>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-                {(['pages', 'verses', 'times', 'minutes'] as const).map((u) => <Chip key={u} on={h.unit === u} label={t(u)} onPress={() => set({ unit: u })} />)}
+                {(['pages', 'juz', 'surah', 'verses', 'times', 'minutes'] as const).map((u) => <Chip key={u} on={h.unit === u} label={t(u)} onPress={() => set({ unit: u })} />)}
               </View>
             </View>
           </View>
