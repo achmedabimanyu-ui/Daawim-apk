@@ -39,7 +39,7 @@ export function LogSheet({ habit, date, onClose }: { habit: Habit | null; date: 
 
   const input = {
     borderWidth: 2, borderColor: th.border, borderRadius: 14, padding: 12, color: th.text,
-    fontFamily: 'Nunito_700Bold', fontSize: 15, backgroundColor: th.sunk,
+    fontFamily: 'PlusJakartaSans_700Bold', fontSize: 15, backgroundColor: th.sunk,
   } as const;
 
   return (
@@ -87,7 +87,7 @@ export function LogSheet({ habit, date, onClose }: { habit: Habit | null; date: 
                       value={String(e.value)}
                       keyboardType="number-pad"
                       onChangeText={(v) => setE((x) => ({ ...x, value: Number(v.replace(/\D/g, '')) || 0 }))}
-                      style={{ fontFamily: 'Nunito_900Black', fontSize: 44, color: th.accent.main, textAlign: 'center', padding: 0 }}
+                      style={{ fontFamily: 'PlusJakartaSans_800ExtraBold', fontSize: 44, color: th.accent.main, textAlign: 'center', padding: 0 }}
                     />
                     <Txt w="bold" size={13} color={th.muted}>/ {habit.target} {unitLabel(habit.unit, t)}</Txt>
                   </View>

@@ -102,7 +102,7 @@ export default function Onboarding() {
                 placeholderTextColor={th.faint}
                 style={{
                   borderWidth: 2, borderColor: th.border, borderRadius: 16, padding: 16, fontSize: 18,
-                  fontFamily: 'Nunito_700Bold', color: th.text, backgroundColor: th.sunk,
+                  fontFamily: 'PlusJakartaSans_700Bold', color: th.text, backgroundColor: th.sunk,
                 }}
               />
             </>

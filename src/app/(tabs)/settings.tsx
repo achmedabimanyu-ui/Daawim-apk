@@ -75,7 +75,7 @@ export default function SettingsScreen() {
               <TextInput
                 value={settings.name}
                 onChangeText={(v) => setSettings({ name: v })}
-                style={{ fontFamily: 'Nunito_800ExtraBold', fontSize: 20, color: th.text, paddingVertical: 4, borderBottomWidth: 2, borderColor: th.border }}
+                style={{ fontFamily: 'PlusJakartaSans_800ExtraBold', fontSize: 20, color: th.text, paddingVertical: 4, borderBottomWidth: 2, borderColor: th.border }}
               />
             </View>
           </View>

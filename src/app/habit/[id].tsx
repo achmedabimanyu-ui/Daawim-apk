@@ -28,7 +28,7 @@ export default function HabitEditor() {
 
   const input = {
     borderWidth: 2, borderColor: th.border, borderRadius: 14, padding: 14, color: th.text,
-    fontFamily: lang === 'ar' ? 'Cairo_700Bold' : 'Nunito_700Bold', fontSize: 16, backgroundColor: th.sunk,
+    fontFamily: lang === 'ar' ? 'Cairo_700Bold' : 'PlusJakartaSans_700Bold', fontSize: 16, backgroundColor: th.sunk,
   } as const;
   const Label = ({ children }: { children: string }) => (
     <Txt w="black" size={13} color={th.muted} style={{ marginTop: 20, marginBottom: 8, letterSpacing: 1, textTransform: 'uppercase' }}>{children}</Txt>

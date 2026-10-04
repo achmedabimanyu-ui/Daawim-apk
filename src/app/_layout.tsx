@@ -1,9 +1,6 @@
 import { Cairo_500Medium, Cairo_700Bold, Cairo_800ExtraBold } from '@expo-google-fonts/cairo';
 import {
-  Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold, Nunito_900Black, useFonts,
-} from '@expo-google-fonts/nunito';
-import {
-  PlusJakartaSans_500Medium, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold,
+  PlusJakartaSans_500Medium, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold, useFonts,
 } from '@expo-google-fonts/plus-jakarta-sans';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -17,7 +14,6 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
   const [fonts] = useFonts({
-    Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold, Nunito_900Black,
     PlusJakartaSans_500Medium, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold,
     Cairo_500Medium, Cairo_700Bold, Cairo_800ExtraBold,
   });
