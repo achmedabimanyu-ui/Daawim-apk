@@ -3,46 +3,38 @@ import { useEffect, useState } from 'react';
 import { Modal, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
-  Easing, FadeIn, FadeInDown, ZoomIn, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming,
+  Easing, FadeIn, FadeInDown, ZoomIn, useAnimatedStyle, useSharedValue, withDelay, withTiming,
 } from 'react-native-reanimated';
 import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/theme';
 import { Flame } from './Flame';
 import { Button, Txt } from './ui';
 
-function Particle({ i, color }: { i: number; color: string }) {
+function Ribbon({ i, color, width }: { i: number; color: string; width: number }) {
   const p = useSharedValue(0);
-  const angle = (i / 24) * Math.PI * 2 + (i % 3) * 0.2;
-  const dist = 110 + (i % 4) * 30;
+  const x = ((i * 37) % 100) / 100 * width - width / 2;
+  const sway = (i % 2 ? 1 : -1) * (10 + (i % 3) * 6);
   useEffect(() => {
-    p.value = withDelay(250, withTiming(1, { duration: 900, easing: Easing.out(Easing.cubic) }));
-  }, [p]);
+    p.value = withDelay(150 + i * 70, withTiming(1, { duration: 2600, easing: Easing.out(Easing.quad) }));
+  }, [p, i]);
   const st = useAnimatedStyle(() => ({
-    opacity: 1 - p.value,
+    opacity: p.value < 0.15 ? p.value / 0.15 * 0.55 : 0.55 * (1 - p.value),
     transform: [
-      { translateX: Math.cos(angle) * dist * p.value },
-      { translateY: Math.sin(angle) * dist * p.value + 40 * p.value * p.value },
-      { rotate: `${p.value * 360}deg` },
+      { translateX: x + Math.sin(p.value * Math.PI * 2) * sway },
+      { translateY: -140 + p.value * 260 },
+      { rotate: `${(i % 2 ? 1 : -1) * (20 + p.value * 40)}deg` },
     ],
   }));
-  return <Animated.View style={[{ position: 'absolute', width: 10, height: 14, borderRadius: 3, backgroundColor: color }, st]} />;
+  return <Animated.View style={[{ position: 'absolute', width: 2.5, height: 14, borderRadius: 2, backgroundColor: color }, st]} />;
 }
 
 function Glow({ color }: { color: string }) {
   const g = useSharedValue(0);
-  const r = useSharedValue(0);
   useEffect(() => {
-    g.value = withRepeat(withSequence(withTiming(1, { duration: 1100 }), withTiming(0, { duration: 1100 })), -1);
-    r.value = withDelay(200, withRepeat(withTiming(1, { duration: 1600, easing: Easing.out(Easing.quad) }), -1));
-  }, [g, r]);
-  const glow = useAnimatedStyle(() => ({ opacity: 0.35 + g.value * 0.3, transform: [{ scale: 1 + g.value * 0.12 }] }));
-  const ring = useAnimatedStyle(() => ({ opacity: 1 - r.value, transform: [{ scale: 0.7 + r.value * 0.9 }] }));
-  return (
-    <>
-      <Animated.View style={[{ position: 'absolute', width: 200, height: 200, borderRadius: 100, backgroundColor: color }, glow]} />
-      <Animated.View style={[{ position: 'absolute', width: 200, height: 200, borderRadius: 100, borderWidth: 3, borderColor: color }, ring]} />
-    </>
-  );
+    g.value = withTiming(1, { duration: 900, easing: Easing.out(Easing.cubic) });
+  }, [g]);
+  const glow = useAnimatedStyle(() => ({ opacity: g.value * 0.5, transform: [{ scale: 0.8 + g.value * 0.2 }] }));
+  return <Animated.View style={[{ position: 'absolute', width: 190, height: 190, borderRadius: 95, backgroundColor: color }, glow]} />;
 }
 
 function CountUp({ to, color }: { to: number; color: string }) {
@@ -52,8 +44,8 @@ function CountUp({ to, color }: { to: number; color: string }) {
     return () => clearTimeout(id);
   }, [to]);
   return (
-    <Animated.View key={n} entering={ZoomIn.springify().damping(8)}>
-      <Txt w="black" size={96} color={color} style={{ lineHeight: 104 }}>{n}</Txt>
+    <Animated.View key={n} entering={FadeIn.duration(400)}>
+      <Txt w="black" size={72} color={color} style={{ lineHeight: 80 }}>{n}</Txt>
     </Animated.View>
   );
 }
@@ -63,19 +55,19 @@ export function Celebration({ visible, streak, onClose }: { visible: boolean; st
   const { t } = useT();
   const { width } = useWindowDimensions();
   useEffect(() => {
-    if (visible) Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+    if (visible) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
   }, [visible]);
   if (!visible) return null;
   const colors = [th.flame, th.gold, th.accent.main, th.ice, '#FF5A4E'];
   return (
     <Modal visible transparent animationType="fade" onRequestClose={onClose}>
       <Animated.View entering={FadeIn} style={{ flex: 1, backgroundColor: th.bg, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-        <LinearGradient colors={[th.isDark ? 'rgba(255,138,61,0.22)' : '#FFE9D6', th.bg]} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
+        <LinearGradient colors={[th.isDark ? 'rgba(255,138,61,0.10)' : '#FFF4EA', th.bg]} style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} />
         <View style={{ alignItems: 'center', justifyContent: 'center', width, height: 220 }}>
-          <Glow color={th.isDark ? 'rgba(255,138,61,0.35)' : 'rgba(255,170,90,0.45)'} />
-          {Array.from({ length: 24 }, (_, i) => <Particle key={i} i={i} color={colors[i % colors.length]} />)}
-          <Animated.View entering={ZoomIn.springify().damping(7).stiffness(140)}>
-            <Flame size={150} />
+          <Glow color={th.isDark ? 'rgba(255,138,61,0.18)' : 'rgba(255,190,130,0.35)'} />
+          {Array.from({ length: 14 }, (_, i) => <Ribbon key={i} i={i} width={width * 0.8} color={colors[i % colors.length]} />)}
+          <Animated.View entering={ZoomIn.duration(500).easing(Easing.out(Easing.cubic))}>
+            <Flame size={124} />
           </Animated.View>
         </View>
         <CountUp to={streak} color={th.flame} />

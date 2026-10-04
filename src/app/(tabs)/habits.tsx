@@ -12,7 +12,8 @@ import { SectionTitle, Txt, softShadow } from '@/components/ui';
 import type { Habit } from '@/lib/defaults';
 import { fromKey, rangeKeys, todayKey } from '@/lib/date';
 import { useT, weekdayShort } from '@/lib/i18n';
-import { dayStatus, scheduled } from '@/lib/stats';
+import { isDone, scheduled } from '@/lib/stats';
+import { categoryName } from '@/lib/labels';
 import { useTheme } from '@/lib/theme';
 import { useApp } from '@/store/app';
 
@@ -45,7 +46,21 @@ export default function Habits() {
 
         <Animated.View key={date} entering={FadeIn} style={{ marginTop: 16 }}>
           {list.length === 0 && <Txt w="regular" color={th.muted}>{t('nothingYet')}</Txt>}
-          {list.map((h) => <HabitRow key={h.id} habit={h} date={date} onOpen={setOpen} />)}
+          {state.categories.map((c, ci) => {
+            const items = list.filter((h) => h.category === c.id);
+            if (!items.length) return null;
+            const doneCount = items.filter((h) => isDone(h, state.logs, date)).length;
+            return (
+              <View key={c.id} style={{ marginTop: ci ? 10 : 0 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12, marginTop: ci ? 8 : 0 }}>
+                  <Txt w="black" size={13} color={th.muted} style={{ letterSpacing: 1, textTransform: 'uppercase' }}>{categoryName(c, lang)}</Txt>
+                  <View style={{ flex: 1, height: 1, backgroundColor: th.border }} />
+                  <Txt w="bold" size={12} color={th.muted}>{doneCount}/{items.length}</Txt>
+                </View>
+                {items.map((h) => <HabitRow key={h.id} habit={h} date={date} onOpen={setOpen} />)}
+              </View>
+            );
+          })}
         </Animated.View>
 
         <SectionTitle>{t('streak')}</SectionTitle>
