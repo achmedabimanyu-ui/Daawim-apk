@@ -5,6 +5,7 @@ import { Image, ScrollView, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Celebration } from '@/components/Celebration';
+import { ElKisaiCTA } from '@/components/ElKisaiCTA';
 import { Flame } from '@/components/Flame';
 import { HabitRow } from '@/components/HabitRow';
 import { LogSheet } from '@/components/LogSheet';
@@ -177,6 +178,9 @@ export default function Dashboard() {
           <Txt w="bold" size={16} style={{ marginTop: 8, lineHeight: 24 }}>{q.text}</Txt>
           <Txt w="regular" size={13} color={th.muted} style={{ marginTop: 6 }}>— {q.src}</Txt>
         </Card>
+        <View style={{ marginTop: 24 }}>
+          <ElKisaiCTA />
+        </View>
       </ScrollView>
       <LogSheet habit={open} date={today} onClose={() => setOpen(null)} />
       <Celebration visible={celebrate} streak={st.current} onClose={() => setCelebrate(false)} />

@@ -4,6 +4,7 @@ import { Camera, Check, Download, MapPin, RotateCcw, Upload } from 'lucide-react
 import { useState, type ReactNode } from 'react';
 import { Alert, Image, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ElKisaiCTA } from '@/components/ElKisaiCTA';
 import { detectLocation } from '@/components/PrayerCard';
 import { Card, Segmented, SectionTitle, Txt } from '@/components/ui';
 import { exportData, importData } from '@/lib/backup';
@@ -162,6 +163,9 @@ export default function SettingsScreen() {
             }
           />
         </Card>
+        <View style={{ marginTop: 24 }}>
+          <ElKisaiCTA />
+        </View>
         <Txt w="regular" size={12} color={th.faint} style={{ textAlign: 'center', marginTop: 24 }}>Daawim v1.0 · offline-first</Txt>
       </ScrollView>
     </SafeAreaView>
