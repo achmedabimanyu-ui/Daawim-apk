@@ -1,0 +1,72 @@
+{
+  "expo": {
+    "name": "Daawim",
+    "slug": "daawim",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.daawim.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Daawim memakai lokasi untuk menghitung jadwal shalat."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1DB37A",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.daawim.app",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-sharing",
+      "expo-localization",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Daawim memakai lokasi untuk menghitung jadwal shalat."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Daawim memakai foto untuk foto profil."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#1DB37A"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "backgroundColor": "#FFFFFF",
+          "dark": {
+            "backgroundColor": "#101417"
+          }
+        }
+      ]
+    ],
+    "scheme": "daawim",
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
