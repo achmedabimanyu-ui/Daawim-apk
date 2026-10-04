@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Circle } from 'react-native-svg';
+import { StatTile } from '@/components/DashboardParts';
 import { Button, Card, ProgressBar, Press3D, SectionTitle, Txt } from '@/components/ui';
 import { addDays, diffDays, fromKey, monthKeys, todayKey } from '@/lib/date';
 import { monthNames, useT, weekdayShort } from '@/lib/i18n';
@@ -24,6 +27,21 @@ function Stepper({ value, onChange, min = 0 }: { value: number; onChange: (n: nu
       <Pressable hitSlop={8} onPress={() => onChange(value + 1)} style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: ROSE, alignItems: 'center', justifyContent: 'center' }}>
         <Plus size={16} color="#fff" strokeWidth={3} />
       </Pressable>
+    </View>
+  );
+}
+
+function CycleRing({ value }: { value: number }) {
+  const th = useTheme();
+  const R = 34;
+  const C = 2 * Math.PI * R;
+  return (
+    <View style={{ width: 84, height: 84, alignItems: 'center', justifyContent: 'center' }}>
+      <Svg width={84} height={84} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
+        <Circle cx={42} cy={42} r={R} stroke={th.isDark ? 'rgba(255,255,255,0.1)' : '#FFFFFF'} strokeWidth={9} fill="none" />
+        <Circle cx={42} cy={42} r={R} stroke={ROSE} strokeWidth={9} fill="none" strokeLinecap="round" strokeDasharray={C} strokeDashoffset={C * (1 - Math.max(0.02, Math.min(1, value)))} />
+      </Svg>
+      <Txt w="black" size={16} color={ROSE}>{Math.round(value * 100)}%</Txt>
     </View>
   );
 }
@@ -60,48 +78,55 @@ export default function Haidh() {
   };
 
   const remaining = fastDebt.total - fastDebt.paid.length;
+  const sinceStart = last ? diffDays(last, today) : 0;
+  const cycleProgress = last ? (sinceStart % avgCycle) / avgCycle : 0;
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: th.bg }}>
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 32 }} showsVerticalScrollIndicator={false}>
         <Txt w="black" size={28}>{t('haidhTracker')}</Txt>
 
-        <Animated.View entering={FadeIn.duration(300)} style={{ marginTop: 16, borderRadius: 24, backgroundColor: ROSE, borderBottomWidth: 5, borderColor: ROSE_D, padding: 20, alignItems: 'center' }}>
-          <Animated.View entering={FadeIn.delay(100).duration(300)} style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(255,255,255,0.25)', alignItems: 'center', justifyContent: 'center' }}>
-            <Droplets color="#fff" size={32} strokeWidth={2.6} />
-          </Animated.View>
-          {current ? (
-            <>
-              <Txt w="black" size={30} color="#fff" style={{ marginTop: 10 }}>{t('dayN', { n: diffDays(current.start, today) + 1 })}</Txt>
-              <Txt w="bold" size={14} color="rgba(255,255,255,0.9)">{t('onPeriod')}</Txt>
-            </>
-          ) : (
-            <>
-              <Txt w="black" size={30} color="#fff" style={{ marginTop: 10 }}>{inDays != null ? `${inDays} ${t('days')}` : '—'}</Txt>
-              <Txt w="bold" size={14} color="rgba(255,255,255,0.9)">{t('nextPeriod')}</Txt>
-            </>
-          )}
-          <View style={{ alignSelf: 'stretch', marginTop: 16 }}>
-            <Press3D color="#fff" edge="#F2C4D5" onPress={() => (current ? endPeriod(today) : startPeriod(today))}>
-              <View style={{ paddingVertical: 14, alignItems: 'center' }}>
-                <Txt w="black" size={15} color={ROSE_D} style={{ textTransform: 'uppercase', letterSpacing: 0.8 }}>{current ? t('endPeriod') : t('startPeriod')}</Txt>
+        <Animated.View entering={FadeIn.duration(300)} style={{ marginTop: 16 }}>
+          <LinearGradient
+            colors={th.isDark ? ['rgba(236,91,143,0.22)', 'rgba(236,91,143,0.08)'] : ['#FFE3EC', '#FFF4F8']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{ borderRadius: 28, padding: 18 }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Droplets color={ROSE} size={16} strokeWidth={2.6} />
+                  <Txt w="bold" size={13} color={ROSE}>{current ? t('onPeriod') : t('nextPeriod')}</Txt>
+                </View>
+                <Txt w="black" size={30} style={{ marginTop: 6, letterSpacing: -0.5 }}>
+                  {current ? t('dayN', { n: diffDays(current.start, today) + 1 }) : inDays != null ? `${inDays} ${t('days')}` : '—'}
+                </Txt>
+                <Txt w="regular" size={13} color={th.muted} style={{ marginTop: 2 }}>
+                  {t('cycleLength')} {avgCycle} {t('days')}
+                </Txt>
+              </View>
+              <CycleRing value={cycleProgress} />
+            </View>
+            <Press3D
+              color={ROSE}
+              edge={ROSE_D}
+              style={{ marginTop: 16 }}
+              onPress={() => (current ? endPeriod(today) : startPeriod(today))}
+            >
+              <View style={{ paddingVertical: 13, alignItems: 'center' }}>
+                <Txt w="black" size={14} color="#fff" style={{ textTransform: 'uppercase', letterSpacing: 0.8 }}>{current ? t('endPeriod') : t('startPeriod')}</Txt>
               </View>
             </Press3D>
-          </View>
+          </LinearGradient>
         </Animated.View>
 
-        <View style={{ flexDirection: 'row', gap: 10, marginTop: 14 }}>
-          <Card style={{ flex: 1 }} pad={14}>
-            <Txt w="black" size={22} color={ROSE}>{avgCycle} <Txt w="bold" size={13} color={th.muted}>{t('days')}</Txt></Txt>
-            <Txt w="regular" size={12} color={th.muted}>{t('avgCycle')}</Txt>
-          </Card>
-          <Card style={{ flex: 1 }} pad={14}>
-            <Txt w="black" size={22} color={ROSE}>{avgDur} <Txt w="bold" size={13} color={th.muted}>{t('days')}</Txt></Txt>
-            <Txt w="regular" size={12} color={th.muted}>{t('avgDuration')}</Txt>
-          </Card>
+        <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
+          <StatTile label={t('avgCycle')} value={`${avgCycle}`} caption={t('days')} progress={avgCycle / 40} color={ROSE} />
+          <StatTile label={t('avgDuration')} value={`${avgDur}`} caption={t('days')} progress={avgDur / 10} color="#8B5CF6" />
         </View>
 
-        <Card style={{ marginTop: 14 }} pad={12}>
+        <Card style={{ marginTop: 12 }} pad={14}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, paddingHorizontal: 4 }}>
             <Txt w="black" size={18}>{monthNames[lang][ym.m]} {ym.y}</Txt>
             <View style={{ flexDirection: 'row', gap: 16 }}>
@@ -119,8 +144,8 @@ export default function Haidh() {
               return (
                 <View key={i} style={{ width: `${100 / 7}%`, height: 42, alignItems: 'center', justifyContent: 'center' }}>
                   {k && (
-                    <View style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: p ? ROSE : pr ? ROSE_S : 'transparent', borderWidth: k === today ? 2 : pr ? 2 : 0, borderStyle: pr ? 'dashed' : 'solid', borderColor: k === today ? th.text : ROSE }}>
-                      <Txt w="black" size={14} color={p ? '#fff' : pr ? ROSE_D : th.text}>{Number(k.slice(8))}</Txt>
+                    <View style={{ width: 34, height: 34, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: p ? ROSE : pr ? (th.isDark ? 'rgba(236,91,143,0.18)' : ROSE_S) : k === today ? th.sunk : 'transparent', borderWidth: pr ? 1.5 : 0, borderStyle: 'dashed', borderColor: ROSE }}>
+                      <Txt w={k === today || p ? 'black' : 'bold'} size={14} color={p ? '#fff' : pr ? ROSE : k === today ? ROSE : th.text}>{Number(k.slice(8))}</Txt>
                     </View>
                   )}
                 </View>
@@ -135,7 +160,7 @@ export default function Haidh() {
             <Txt size={15}>{t('cycleLength')}</Txt>
             <Stepper value={cycle.cycleLen} min={15} onChange={(n) => setCycle({ cycleLen: n })} />
           </View>
-          <View style={{ height: 2, backgroundColor: th.border, marginVertical: 12 }} />
+          <View style={{ height: 1, backgroundColor: th.border, marginVertical: 12 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Txt size={15}>{t('periodLength')}</Txt>
             <Stepper value={cycle.periodLen} min={1} onChange={(n) => setCycle({ periodLen: n })} />
@@ -145,7 +170,7 @@ export default function Haidh() {
         <SectionTitle>{t('fastDebt')}</SectionTitle>
         <Card>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <View style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: ROSE_S, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: th.isDark ? 'rgba(236,91,143,0.18)' : ROSE_S, alignItems: 'center', justifyContent: 'center' }}>
               <UtensilsCrossed color={ROSE} strokeWidth={2.6} />
             </View>
             <View style={{ flex: 1 }}>
@@ -163,12 +188,22 @@ export default function Haidh() {
           </View>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
             {Array.from({ length: fastDebt.total }, (_, i) => (
-              <View key={i} style={{ width: 26, height: 26, borderRadius: 8, backgroundColor: i < fastDebt.paid.length ? ROSE : th.sunk, borderWidth: 2, borderColor: i < fastDebt.paid.length ? ROSE_D : th.border }} />
+              <View key={i} style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: i < fastDebt.paid.length ? ROSE : th.sunk }} />
             ))}
           </View>
           <View style={{ flexDirection: 'row', gap: 10 }}>
-            <Button style={{ flex: 1 }} variant="ghost" label={t('undo')} disabled={!fastDebt.paid.length} onPress={unpayDebt} />
-            <Button style={{ flex: 2 }} label={t('payToday')} disabled={remaining <= 0} onPress={() => payDebt(today)} />
+            <Pressable
+              disabled={!fastDebt.paid.length}
+              onPress={unpayDebt}
+              style={{ flex: 1, alignItems: 'center', justifyContent: 'center', borderRadius: 16, borderWidth: 1.5, borderColor: th.border, opacity: fastDebt.paid.length ? 1 : 0.5 }}
+            >
+              <Txt w="black" size={14} color={ROSE} style={{ textTransform: 'uppercase', letterSpacing: 0.8 }}>{t('undo')}</Txt>
+            </Pressable>
+            <Press3D style={{ flex: 2 }} color={ROSE} edge={ROSE_D} disabled={remaining <= 0} onPress={() => payDebt(today)}>
+              <View style={{ paddingVertical: 12, alignItems: 'center' }}>
+                <Txt w="black" size={14} color="#fff" style={{ textTransform: 'uppercase', letterSpacing: 0.8 }}>{t('payToday')}</Txt>
+              </View>
+            </Press3D>
           </View>
         </Card>
       </ScrollView>
