@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, View } from 'react-native';
 import Animated, {
-  useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming,
+  Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 import type { Habit } from '@/lib/defaults';
@@ -38,7 +38,7 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
 
   const tap = () => {
     if (habit.kind === 'count') return onOpen(habit);
-    scale.value = withSequence(withTiming(0.8, { duration: 80 }), withSpring(1, { damping: 6, stiffness: 300 }));
+    scale.value = withSequence(withTiming(0.9, { duration: 90 }), withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) }));
     Haptics.notificationAsync(done ? Haptics.NotificationFeedbackType.Warning : Haptics.NotificationFeedbackType.Success).catch(() => {});
     setEntry(date, habit.id, done ? null : { value: 1 });
   };
