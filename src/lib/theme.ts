@@ -2,6 +2,7 @@ import { useColorScheme } from 'react-native';
 import { useApp } from '@/store/app';
 
 export const accents = {
+  elkisai: { main: '#3A4DC4', dark: '#222462', soft: '#E3E8FA' },
   emerald: { main: '#1DB37A', dark: '#14915F', soft: '#DDF6EA' },
   teal: { main: '#16A6B6', dark: '#0F8593', soft: '#D9F3F6' },
   indigo: { main: '#5B6CF0', dark: '#4252CC', soft: '#E4E7FD' },

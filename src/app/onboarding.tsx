@@ -4,6 +4,7 @@ import { useState, type ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, TextInput, View } from 'react-native';
 import Animated, { FadeInDown, FadeInRight, ZoomIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ElKisaiCTA } from '@/components/ElKisaiCTA';
 import { Flame } from '@/components/Flame';
 import { Button, ProgressBar, Press3D, Txt } from '@/components/ui';
 import { todayKey } from '@/lib/date';
@@ -50,6 +51,9 @@ export default function Onboarding() {
         </View>
         <Animated.View entering={FadeInDown.delay(500)}>
           <Button label={t('getStarted')} onPress={next} />
+          <View style={{ marginTop: 18 }}>
+            <ElKisaiCTA />
+          </View>
         </Animated.View>
       </SafeAreaView>
     );
