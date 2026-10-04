@@ -158,6 +158,11 @@ export default function Dashboard() {
         <View style={{ marginTop: 12 }}>
           <PrayerCard />
         </View>
+        <Card pad={18} style={{ marginTop: 12 }}>
+          <Txt w="black" size={13} color={th.accent.main} style={{ textAlign: 'center', letterSpacing: 1, textTransform: 'uppercase' }}>{t('quote')}</Txt>
+          <Txt w="bold" size={15.5} style={{ lineHeight: 24, textAlign: 'center', marginTop: 8 }}>“{q.text}”</Txt>
+          <Txt w="regular" size={12.5} color={th.muted} style={{ marginTop: 6, textAlign: 'center' }}>{q.src}</Txt>
+        </Card>
 
         <View style={{ flexDirection: row, alignItems: 'center', justifyContent: 'space-between', marginTop: 26, marginBottom: 12 }}>
           <Txt w="black" size={20} style={{ textAlign: align }}>{t('remainingToday')}</Txt>
@@ -187,11 +192,6 @@ export default function Dashboard() {
           <MonthDots />
         </Card>
 
-        <Card pad={18} style={{ marginTop: 14 }}>
-          <Txt w="black" size={13} color={th.accent.main} style={{ textAlign: 'center', letterSpacing: 1, textTransform: 'uppercase' }}>{t('quote')}</Txt>
-          <Txt w="bold" size={15.5} style={{ lineHeight: 24, textAlign: 'center', marginTop: 8 }}>“{q.text}”</Txt>
-          <Txt w="regular" size={12.5} color={th.muted} style={{ marginTop: 6, textAlign: 'center' }}>{q.src}</Txt>
-        </Card>
       </ScrollView>
       <LogSheet habit={open} date={today} onClose={() => setOpen(null)} />
       <Celebration visible={celebrate} streak={st.current} onClose={() => setCelebrate(false)} />
