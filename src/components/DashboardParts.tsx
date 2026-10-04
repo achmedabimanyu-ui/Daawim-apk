@@ -13,10 +13,10 @@ import { Card, Segmented, Txt } from './ui';
 
 const ACircle = Animated.createAnimatedComponent(Circle);
 
-export function ProgressHero({ value, label }: { value: number; label: string }) {
+export function ProgressHero({ value, label, size = 168 }: { value: number; label: string; size?: number }) {
   const th = useTheme();
-  const size = 168;
-  const R = 74;
+  const R = size / 2 - 10;
+  const inner = size - 40;
   const C = 2 * Math.PI * R;
   const p = useSharedValue(0);
   const pop = useSharedValue(0.85);
@@ -31,12 +31,12 @@ export function ProgressHero({ value, label }: { value: number; label: string })
   return (
     <Animated.View style={[{ width: size, height: size, alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }, scale]}>
       <Svg width={size} height={size} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
-        <Circle cx={size / 2} cy={size / 2} r={R} stroke={th.isDark ? th.border : '#FFFFFF'} strokeWidth={12} fill="none" />
-        <ACircle cx={size / 2} cy={size / 2} r={R} stroke={th.accent.main} strokeWidth={12} fill="none" strokeLinecap="round" strokeDasharray={C} animatedProps={ring} />
+        <Circle cx={size / 2} cy={size / 2} r={R} stroke={th.isDark ? th.border : th.sunk} strokeWidth={size > 150 ? 12 : 10} fill="none" />
+        <ACircle cx={size / 2} cy={size / 2} r={R} stroke={th.accent.main} strokeWidth={size > 150 ? 12 : 10} fill="none" strokeLinecap="round" strokeDasharray={C} animatedProps={ring} />
       </Svg>
-      <View style={{ width: 128, height: 128, borderRadius: 64, backgroundColor: th.accent.main, alignItems: 'center', justifyContent: 'center' }}>
-        <Txt w="black" size={38} color="#fff">{Math.round(value * 100)}%</Txt>
-        <Txt w="black" size={11} color="rgba(255,255,255,0.9)" style={{ letterSpacing: 0.8, textTransform: 'uppercase', textAlign: 'center', maxWidth: 96 }}>{label}</Txt>
+      <View style={{ width: inner, height: inner, borderRadius: inner / 2, backgroundColor: th.accent.main, alignItems: 'center', justifyContent: 'center' }}>
+        <Txt w="black" size={inner * 0.28} color="#fff">{Math.round(value * 100)}%</Txt>
+        {!!label && <Txt w="black" size={11} color="rgba(255,255,255,0.9)" style={{ letterSpacing: 0.8, textTransform: 'uppercase', textAlign: 'center', maxWidth: 96 }}>{label}</Txt>}
       </View>
     </Animated.View>
   );
@@ -166,5 +166,24 @@ export function MonthDots() {
         ))}
       </View>
     </View>
+  );
+}
+
+export function StatTile({ label, value, caption, progress, color }: { label: string; value: string; caption: string; progress: number; color: string }) {
+  const th = useTheme();
+  const w = useSharedValue(0);
+  useEffect(() => {
+    w.value = withTiming(Math.max(0, Math.min(1, progress)), { duration: 800, easing: Easing.out(Easing.cubic) });
+  }, [progress, w]);
+  const bar = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
+  return (
+    <Card pad={14} style={{ flex: 1 }}>
+      <Txt w="bold" size={13} color={th.muted}>{label}</Txt>
+      <Txt w="black" size={30} style={{ marginTop: 6, letterSpacing: -0.5 }}>{value}</Txt>
+      <View style={{ height: 5, borderRadius: 3, backgroundColor: th.sunk, marginTop: 10, overflow: 'hidden' }}>
+        <Animated.View style={[{ height: 5, borderRadius: 3, backgroundColor: color }, bar]} />
+      </View>
+      <Txt w="regular" size={11.5} color={th.muted} style={{ marginTop: 6 }} numberOfLines={1}>{caption}</Txt>
+    </Card>
   );
 }

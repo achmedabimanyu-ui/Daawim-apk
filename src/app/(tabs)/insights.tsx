@@ -213,7 +213,7 @@ export default function Insights() {
           onChange={setTab}
         />
       </View>
-      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 32 }}>
         <Animated.View key={tab} entering={FadeIn.duration(250)}>{body}</Animated.View>
       </ScrollView>
     </SafeAreaView>

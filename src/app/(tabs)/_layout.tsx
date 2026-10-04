@@ -46,12 +46,13 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: th.bg } }}
       tabBar={({ state, navigation }) => (
+        <View style={{ backgroundColor: th.bg, paddingHorizontal: 16, paddingTop: 4, paddingBottom: Math.max(insets.bottom, 12) }}>
         <View
           style={{
-            flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingTop: 6, paddingBottom: Math.max(insets.bottom, 10),
-            backgroundColor: th.card, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+            flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, paddingVertical: 6,
+            backgroundColor: th.isDark ? 'rgba(30,36,42,0.96)' : 'rgba(255,255,255,0.97)', borderRadius: 28,
             borderWidth: th.isDark ? 1 : 0, borderColor: th.border,
-            shadowColor: '#1C2A3A', shadowOpacity: 0.08, shadowRadius: 16, shadowOffset: { width: 0, height: -4 }, elevation: 12,
+            shadowColor: '#20264A', shadowOpacity: th.isDark ? 0.4 : 0.14, shadowRadius: 24, shadowOffset: { width: 0, height: 10 }, elevation: 14,
           }}
         >
           {state.routes
@@ -71,6 +72,7 @@ export default function TabsLayout() {
                 />
               );
             })}
+        </View>
         </View>
       )}
     >

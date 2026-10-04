@@ -11,18 +11,18 @@ export const accents = {
 export type AccentKey = keyof typeof accents;
 
 const light = {
-  bg: '#FFFFFF',
+  bg: '#F4F5F9',
   card: '#FFFFFF',
-  sunk: '#F5F6F8',
-  border: '#E9EBEF',
+  sunk: '#EEF0F5',
+  border: '#E4E7EE',
   text: '#2B3035',
   muted: '#7D848D',
   faint: '#BCC2C9',
 };
 const dark = {
-  bg: '#101417',
-  card: '#1B2226',
-  sunk: '#1B2226',
+  bg: '#0D1013',
+  card: '#171C21',
+  sunk: '#20262C',
   border: '#2C353B',
   text: '#F4F6F7',
   muted: '#B3BCC4',
@@ -58,3 +58,19 @@ export function useTheme() {
   };
 }
 export type Theme = ReturnType<typeof useTheme>;
+
+const PASTELS = [
+  { from: '#E3EEFF', to: '#F3F7FF', fg: '#3B7BF0' },
+  { from: '#FFE9DC', to: '#FFF6F0', fg: '#F07A2E' },
+  { from: '#E1F7EC', to: '#F2FBF6', fg: '#1BA672' },
+  { from: '#F0E6FF', to: '#F8F3FF', fg: '#8B5CF6' },
+  { from: '#FFE3EC', to: '#FFF3F7', fg: '#E5487B' },
+  { from: '#DDF4F7', to: '#F1FAFB', fg: '#0FA3B1' },
+];
+
+export function pastel(key: string, dark: boolean) {
+  let h = 0;
+  for (const c of key) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const p = PASTELS[h % PASTELS.length];
+  return dark ? { from: `${p.fg}30`, to: `${p.fg}12`, fg: p.fg } : p;
+}

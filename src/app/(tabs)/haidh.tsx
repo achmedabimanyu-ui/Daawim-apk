@@ -63,7 +63,7 @@ export default function Haidh() {
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: th.bg }}>
-      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 32 }} showsVerticalScrollIndicator={false}>
         <Txt w="black" size={28}>{t('haidhTracker')}</Txt>
 
         <Animated.View entering={FadeInDown.springify().damping(16)} style={{ marginTop: 16, borderRadius: 24, backgroundColor: ROSE, borderBottomWidth: 5, borderColor: ROSE_D, padding: 20, alignItems: 'center' }}>

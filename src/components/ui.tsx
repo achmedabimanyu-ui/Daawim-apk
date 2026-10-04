@@ -37,11 +37,11 @@ export function Txt({
   const { rtl } = useT();
   const family = rtl
     ? { regular: 'Cairo_500Medium', bold: 'Cairo_700Bold', black: 'Cairo_800ExtraBold' }[w]
-    : { regular: 'Nunito_600SemiBold', bold: 'Nunito_800ExtraBold', black: 'Nunito_900Black' }[w];
+    : { regular: 'PlusJakartaSans_500Medium', bold: 'PlusJakartaSans_700Bold', black: 'PlusJakartaSans_800ExtraBold' }[w];
   return (
     <Text
       {...rest}
-      style={[{ fontFamily: family, fontSize: Math.round(size * 0.88), color: color ?? th.text, writingDirection: rtl ? 'rtl' : 'ltr' }, style]}
+      style={[{ fontFamily: family, fontSize: Math.round(size * 0.86), color: color ?? th.text, writingDirection: rtl ? 'rtl' : 'ltr' }, style]}
     />
   );
 }
@@ -52,9 +52,9 @@ export function Card({ children, style, pad = 16 }: { children: ReactNode; style
     <View
       style={[
         {
-          backgroundColor: th.card, borderRadius: 22, padding: pad,
-          borderWidth: 1.5, borderBottomWidth: 4, borderColor: th.border,
-          shadowColor: '#1C2A3A', shadowOpacity: th.isDark ? 0 : 0.06, shadowRadius: 12, shadowOffset: { width: 0, height: 4 }, elevation: th.isDark ? 0 : 2,
+          backgroundColor: th.card, borderRadius: 24, padding: pad,
+          borderWidth: th.isDark ? 1 : 0, borderColor: th.border,
+          ...softShadow(th.isDark),
         },
         style,
       ]}
@@ -64,6 +64,11 @@ export function Card({ children, style, pad = 16 }: { children: ReactNode; style
   );
 }
 
+export const softShadow = (dark: boolean, color = '#20264A') =>
+  dark
+    ? {}
+    : { shadowColor: color, shadowOpacity: 0.08, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 3 };
+
 export function Press3D({
   children,
   onPress,
@@ -71,7 +76,6 @@ export function Press3D({
   edge,
   style,
   radius = 16,
-  depth = 4,
   disabled,
   haptic = true,
 }: {
@@ -85,24 +89,31 @@ export function Press3D({
   disabled?: boolean;
   haptic?: boolean;
 }) {
-  const y = useSharedValue(0);
-  const face = useAnimatedStyle(() => ({ transform: [{ translateY: y.value }] }));
+  const sc = useSharedValue(1);
+  const anim = useAnimatedStyle(() => ({ transform: [{ scale: sc.value }] }));
+  const solid = color !== '#fff' && color !== '#FFFFFF' && !color.startsWith('rgba');
   return (
     <Pressable
       disabled={disabled}
       onPressIn={() => {
-        y.value = withTiming(depth, { duration: 60 });
+        sc.value = withTiming(0.96, { duration: 90 });
         if (haptic) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
       }}
       onPressOut={() => {
-        y.value = withSpring(0, { damping: 12, stiffness: 400 });
+        sc.value = withSpring(1, { damping: 10, stiffness: 300 });
       }}
       onPress={onPress}
       style={[{ opacity: disabled ? 0.5 : 1 }, style]}
     >
-      <View style={{ backgroundColor: edge, borderRadius: radius, paddingBottom: depth }}>
-        <Animated.View style={[{ backgroundColor: color, borderRadius: radius, marginTop: 0 }, face]}>{children}</Animated.View>
-      </View>
+      <Animated.View
+        style={[
+          { backgroundColor: color, borderRadius: radius },
+          solid ? { shadowColor: edge, shadowOpacity: 0.35, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 4 } : null,
+          anim,
+        ]}
+      >
+        {children}
+      </Animated.View>
     </Pressable>
   );
 }
@@ -135,7 +146,7 @@ export function Button({
       <View
         style={[
           s.btn,
-          variant === 'ghost' && { borderWidth: 2, borderColor: th.border, borderRadius: 16 },
+          variant === 'ghost' && { borderWidth: 1.5, borderColor: th.border, borderRadius: 16 },
         ]}
       >
         {icon}

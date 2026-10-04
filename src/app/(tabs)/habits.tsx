@@ -7,7 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { HabitRow } from '@/components/HabitRow';
 import { LogSheet } from '@/components/LogSheet';
 import { StreakCalendar } from '@/components/StreakCalendar';
-import { SectionTitle, Txt } from '@/components/ui';
+import { WeekStrip } from '@/components/WeekStrip';
+import { SectionTitle, Txt, softShadow } from '@/components/ui';
 import type { Habit } from '@/lib/defaults';
 import { fromKey, rangeKeys, todayKey } from '@/lib/date';
 import { useT, weekdayShort } from '@/lib/i18n';
@@ -26,33 +27,20 @@ export default function Habits() {
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: th.bg }}>
-      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 32 }} showsVerticalScrollIndicator={false}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Txt w="black" size={28}>{t('habits')}</Txt>
           <Pressable
             onPress={() => router.push('/manage')}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 100, backgroundColor: th.accent.soft }}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 9, borderRadius: 100, backgroundColor: th.card, ...softShadow(th.isDark) }}
           >
             <SlidersHorizontal color={th.accent.main} size={16} strokeWidth={2.8} />
             <Txt size={13} color={th.accent.main}>{t('manage')}</Txt>
           </Pressable>
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 6, marginTop: 16 }}>
-          {week.map((k) => {
-            const on = k === date;
-            const st = dayStatus(state, k);
-            const dot = st === 'goal' ? th.flame : st === 'udzur' ? th.ice : st === 'partial' ? th.accent.main : 'transparent';
-            return (
-              <Pressable key={k} onPress={() => setDate(k)} style={{ flex: 1 }}>
-                <View style={{ alignItems: 'center', paddingVertical: 10, borderRadius: 14, borderWidth: 2, borderBottomWidth: on ? 4 : 2, borderColor: on ? th.accent.main : th.border, backgroundColor: on ? th.accent.soft : th.card }}>
-                  <Txt w="bold" size={11} color={on ? th.accent.dark : th.muted}>{weekdayShort[lang][fromKey(k).getDay()]}</Txt>
-                  <Txt w="black" size={17} color={on ? th.accent.dark : th.text}>{Number(k.slice(8))}</Txt>
-                  <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: dot, marginTop: 3 }} />
-                </View>
-              </Pressable>
-            );
-          })}
+        <View style={{ marginTop: 16 }}>
+          <WeekStrip value={date} onChange={setDate} />
         </View>
 
         <Animated.View key={date} entering={FadeIn} style={{ marginTop: 16 }}>

@@ -52,7 +52,7 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: th.bg }}>
-      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 32 }} keyboardShouldPersistTaps="handled">
         <Txt w="black" size={28}>{t('settings')}</Txt>
 
         <SectionTitle>{t('profile')}</SectionTitle>

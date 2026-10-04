@@ -1,6 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { Check, Plus } from 'lucide-react-native';
 import { useEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, View } from 'react-native';
 import Animated, {
   useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming,
@@ -10,7 +11,7 @@ import type { Habit } from '@/lib/defaults';
 import { habitName, unitLabel } from '@/lib/labels';
 import { useT } from '@/lib/i18n';
 import { progressOf } from '@/lib/stats';
-import { useTheme } from '@/lib/theme';
+import { pastel, useTheme } from '@/lib/theme';
 import { useApp } from '@/store/app';
 import { HabitIcon, Txt } from './ui';
 
@@ -44,43 +45,58 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
 
   const detail = [entry?.book, entry?.matan, entry?.surah, entry?.juz && `${t('juz')} ${entry.juz}`].filter(Boolean).join(' · ');
 
+  const pc = pastel(habit.id, th.isDark);
+  const press = useSharedValue(1);
+  const card = useAnimatedStyle(() => ({ transform: [{ scale: press.value }] }));
+
   return (
-    <Pressable
-      onPress={() => onOpen(habit)}
-      style={{
-        flexDirection: rtl ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 12,
-        backgroundColor: done ? th.accent.soft : th.card, borderRadius: 20, marginBottom: 10,
-        borderWidth: 1.5, borderBottomWidth: 4, borderColor: done ? th.accent.main : th.border,
-      }}
-    >
-      <View style={{ width: 38, height: 38, borderRadius: 12, backgroundColor: done ? th.card : th.accent.soft, alignItems: 'center', justifyContent: 'center' }}>
-        <HabitIcon name={habit.icon} size={19} color={th.accent.main} />
-      </View>
-      <View style={{ flex: 1 }}>
-        <Txt size={15} style={{ textAlign: rtl ? 'right' : 'left' }}>{habitName(habit, lang)}</Txt>
-        <Txt w="regular" size={13} color={th.muted} numberOfLines={1} style={{ textAlign: rtl ? 'right' : 'left' }}>
-          {habit.kind === 'count'
-            ? `${entry?.value ?? 0} / ${habit.target} ${unitLabel(habit.unit, t)}${detail ? ' · ' + detail : ''}`
-            : done ? t('done') : t('notDone')}
-        </Txt>
-      </View>
-      <Pressable hitSlop={10} onPress={tap}>
-        <Animated.View style={[{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }, bubble]}>
-          {done ? (
-            <View style={{ width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: th.accent.main }}>
-              <Check color="#fff" size={17} strokeWidth={3.6} />
-            </View>
-          ) : (
-            <>
-              <Svg width={34} height={34} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
-                <Circle cx={17} cy={17} r={R} stroke={th.border} strokeWidth={3} fill="none" />
-                <ACircle cx={17} cy={17} r={R} stroke={th.accent.main} strokeWidth={3} fill="none" strokeLinecap="round" strokeDasharray={C} animatedProps={ringProps} />
-              </Svg>
-              {habit.kind === 'count' && <Plus color={th.muted} size={14} strokeWidth={3} />}
-            </>
-          )}
-        </Animated.View>
+    <Animated.View style={[{ marginBottom: 12 }, card]}>
+      <Pressable
+        onPress={() => onOpen(habit)}
+        onPressIn={() => (press.value = withTiming(0.98, { duration: 90 }))}
+        onPressOut={() => (press.value = withSpring(1, { damping: 12 }))}
+      >
+        <LinearGradient
+          colors={[pc.from, pc.to]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            flexDirection: rtl ? 'row-reverse' : 'row', alignItems: 'center', gap: 12,
+            paddingVertical: 14, paddingHorizontal: 14, borderRadius: 22, opacity: done ? 0.92 : 1,
+          }}
+        >
+          <Pressable hitSlop={10} onPress={tap}>
+            <Animated.View style={[{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }, bubble]}>
+              {done ? (
+                <View style={{ width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: pc.fg }}>
+                  <Check color="#fff" size={16} strokeWidth={3.6} />
+                </View>
+              ) : (
+                <>
+                  <Svg width={32} height={32} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
+                    <Circle cx={16} cy={16} r={R} stroke={`${pc.fg}55`} strokeWidth={2.5} fill={th.isDark ? 'transparent' : 'rgba(255,255,255,0.85)'} />
+                    <ACircle cx={16} cy={16} r={R} stroke={pc.fg} strokeWidth={3} fill="none" strokeLinecap="round" strokeDasharray={C} animatedProps={ringProps} />
+                  </Svg>
+                  {habit.kind === 'count' && <Plus color={pc.fg} size={14} strokeWidth={3} />}
+                </>
+              )}
+            </Animated.View>
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            <Txt w="black" size={16} numberOfLines={1} style={{ textAlign: rtl ? 'right' : 'left', textDecorationLine: done ? 'line-through' : 'none', opacity: done ? 0.7 : 1 }}>
+              {habitName(habit, lang)}
+            </Txt>
+            <Txt w="bold" size={12.5} color={pc.fg} numberOfLines={1} style={{ textAlign: rtl ? 'right' : 'left', marginTop: 2 }}>
+              {habit.kind === 'count'
+                ? `${entry?.value ?? 0} / ${habit.target} ${unitLabel(habit.unit, t)}${detail ? ' · ' + detail : ''}`
+                : done ? t('done') : t('notDone')}
+            </Txt>
+          </View>
+          <View style={{ width: 46, height: 46, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: th.isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.75)' }}>
+            <HabitIcon name={habit.icon} size={26} color={pc.fg} />
+          </View>
+        </LinearGradient>
       </Pressable>
-    </Pressable>
+    </Animated.View>
   );
 }
