@@ -31,7 +31,7 @@ export function ProgressHero({ value, label }: { value: number; label: string })
   return (
     <Animated.View style={[{ width: size, height: size, alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }, scale]}>
       <Svg width={size} height={size} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
-        <Circle cx={size / 2} cy={size / 2} r={R} stroke={th.accent.soft} strokeWidth={12} fill="none" />
+        <Circle cx={size / 2} cy={size / 2} r={R} stroke={th.isDark ? th.border : '#FFFFFF'} strokeWidth={12} fill="none" />
         <ACircle cx={size / 2} cy={size / 2} r={R} stroke={th.accent.main} strokeWidth={12} fill="none" strokeLinecap="round" strokeDasharray={C} animatedProps={ring} />
       </Svg>
       <View style={{ width: 128, height: 128, borderRadius: 64, backgroundColor: th.accent.main, alignItems: 'center', justifyContent: 'center' }}>
@@ -126,7 +126,7 @@ export function MonthDots() {
   const today = todayKey();
   return (
     <View>
-      <Txt w="black" size={24} style={{ textAlign: 'center', marginBottom: 12 }}>{monthNames[lang][now.getMonth()]}</Txt>
+      <Txt w="black" size={20} style={{ textAlign: 'center', marginBottom: 10 }}>{monthNames[lang][now.getMonth()]}</Txt>
       <View style={{ flexDirection: 'row' }}>
         {weekdayShort[lang].map((d) => (
           <Txt key={d} w="black" size={13} color={th.accent.main} style={{ flex: 1, textAlign: 'center' }}>{d.slice(0, lang === 'ar' ? 3 : 1)}</Txt>

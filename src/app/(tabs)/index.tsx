@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRight, CircleCheck, Trophy } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Image, Pressable, ScrollView, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -29,7 +29,7 @@ export default function Dashboard() {
 
   const list = scheduled(state, today);
   const next = list.filter((h) => !isDone(h, logs, today)).slice(0, 3);
-  const { rate } = dayRate(state, today);
+  const { rate, done, total } = dayRate(state, today);
   const st = useMemo(() => streaks(state), [logs, state.habits, state.periods, settings.dailyGoal]); // eslint-disable-line react-hooks/exhaustive-deps
   const prev = useRef(st.todayDone);
   useEffect(() => {
@@ -63,12 +63,26 @@ export default function Dashboard() {
         </View>
 
         <Animated.View entering={FadeInDown.springify().damping(16)} style={{ marginTop: 18 }}>
-          <Pressable onPress={() => router.navigate('/(tabs)/habits')}>
-            <ProgressHero value={rate} label={t('todayProgress')} />
-          </Pressable>
-          <Txt w="bold" size={14} color={th.muted} style={{ textAlign: 'center', marginTop: 10 }}>
-            {st.current} {t('dayStreak')} · {t('bestStreak')} {st.best}
-          </Txt>
+          <Card pad={18} style={{ backgroundColor: th.accent.soft, borderColor: th.isDark ? th.border : `${th.accent.main}33` }}>
+            <Pressable onPress={() => router.navigate('/(tabs)/habits')}>
+              <ProgressHero value={rate} label={t('todayProgress')} />
+            </Pressable>
+          </Card>
+          <View style={{ flexDirection: 'row', gap: 10, marginTop: 12 }}>
+            {[
+              { icon: <Flame size={22} lit={st.todayDone} animate={false} />, v: st.current, l: t('streak'), c: st.todayDone ? th.flame : th.text },
+              { icon: <Trophy color={th.gold} size={20} strokeWidth={2.6} />, v: st.best, l: t('bestStreak'), c: th.text },
+              { icon: <CircleCheck color={th.accent.main} size={20} strokeWidth={2.6} />, v: `${done}/${total}`, l: t('done'), c: th.text },
+            ].map((x, i) => (
+              <Animated.View key={i} entering={FadeInDown.delay(120 + i * 70).springify().damping(16)} style={{ flex: 1 }}>
+                <Card pad={12} style={{ alignItems: 'center' }}>
+                  {x.icon}
+                  <Txt w="black" size={18} color={x.c} style={{ marginTop: 4 }}>{x.v}</Txt>
+                  <Txt w="bold" size={11} color={th.muted}>{x.l}</Txt>
+                </Card>
+              </Animated.View>
+            ))}
+          </View>
         </Animated.View>
 
         <SectionTitle
@@ -107,11 +121,11 @@ export default function Dashboard() {
           <ProgressChart />
         </View>
 
-        <View style={{ marginTop: 26 }}>
+        <Card pad={16} style={{ marginTop: 18 }}>
           <MonthDots />
-        </View>
+        </Card>
 
-        <Card pad={16} style={{ marginTop: 24 }}>
+        <Card pad={16} style={{ marginTop: 18 }}>
           <Txt w="bold" size={15} style={{ lineHeight: 22, textAlign: 'center' }}>“{q.text}”</Txt>
           <Txt w="regular" size={12} color={th.muted} style={{ marginTop: 6, textAlign: 'center' }}>{q.src}</Txt>
         </Card>

@@ -1,14 +1,15 @@
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import { Camera, Check, ChevronRight, Download, ListChecks, MapPin, RotateCcw, Upload } from 'lucide-react-native';
+import { Bell, BellRing, Camera, Check, ChevronRight, Download, ListChecks, MapPin, RotateCcw, Upload } from 'lucide-react-native';
 import { useState, type ReactNode } from 'react';
-import { Alert, Image, Pressable, ScrollView, TextInput, View } from 'react-native';
+import { Alert, Image, Pressable, ScrollView, Switch, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ElKisaiCTA } from '@/components/ElKisaiCTA';
 import { detectLocation } from '@/components/PrayerCard';
 import { Card, Segmented, SectionTitle, Txt } from '@/components/ui';
 import { exportData, importData } from '@/lib/backup';
 import { useT } from '@/lib/i18n';
+import { askPermission, notifyDefaults } from '@/lib/notify';
 import { methods } from '@/lib/prayer';
 import { accents, useTheme, type AccentKey } from '@/lib/theme';
 import { useApp } from '@/store/app';
@@ -30,6 +31,14 @@ export default function SettingsScreen() {
   const { settings, setSettings, setPrayer, reset } = useApp();
   const [showMethods, setShowMethods] = useState(false);
   const [locBusy, setLocBusy] = useState(false);
+  const notify = { ...notifyDefaults, ...settings.notify };
+  const toggleNotify = async (key: 'prayer' | 'daily', v: boolean) => {
+    if (v) {
+      if (key === 'prayer' && settings.prayer.lat == null) return Alert.alert(t('needLocation'));
+      if (!(await askPermission())) return Alert.alert(t('notifDenied'));
+    }
+    setSettings({ notify: { ...notify, [key]: v } });
+  };
   const Divider = () => <View style={{ height: 2, backgroundColor: th.border }} />;
   const Sub = ({ children }: { children: string }) => (
     <Txt w="black" size={12} color={th.muted} style={{ marginBottom: 8, marginTop: 12, letterSpacing: 1, textTransform: 'uppercase' }}>{children}</Txt>
@@ -146,6 +155,44 @@ export default function SettingsScreen() {
             value={settings.prayer.madhab}
             onChange={(m) => setPrayer({ madhab: m })}
           />
+        </Card>
+
+        <SectionTitle>{t('notifications')}</SectionTitle>
+        <Card pad={12}>
+          <Row
+            icon={<BellRing color={th.accent.main} size={20} strokeWidth={2.6} />}
+            label={t('prayerReminder')}
+            right={
+              <Switch
+                value={notify.prayer}
+                trackColor={{ true: th.accent.main, false: th.border }}
+                thumbColor="#fff"
+                onValueChange={(v) => toggleNotify('prayer', v)}
+              />
+            }
+          />
+          <Divider />
+          <Row
+            icon={<Bell color={th.accent.main} size={20} strokeWidth={2.6} />}
+            label={t('dailyReminder')}
+            right={
+              <Switch
+                value={notify.daily}
+                trackColor={{ true: th.accent.main, false: th.border }}
+                thumbColor="#fff"
+                onValueChange={(v) => toggleNotify('daily', v)}
+              />
+            }
+          />
+          {notify.daily && (
+            <View style={{ paddingBottom: 8 }}>
+              <Segmented
+                options={[19, 20, 21, 22].map((h) => ({ key: String(h), label: `${h}:00` }))}
+                value={String(notify.dailyHour)}
+                onChange={(h) => setSettings({ notify: { ...notify, dailyHour: Number(h) } })}
+              />
+            </View>
+          )}
         </Card>
 
         <SectionTitle>{t('data')}</SectionTitle>

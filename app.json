@@ -15,7 +15,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FFF7EC",
+        "backgroundColor": "#1DB37A",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -44,6 +44,23 @@
         "expo-image-picker",
         {
           "photosPermission": "Daawim memakai foto untuk foto profil."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#1DB37A"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "backgroundColor": "#FFFFFF",
+          "dark": {
+            "backgroundColor": "#101417"
+          }
         }
       ]
     ],

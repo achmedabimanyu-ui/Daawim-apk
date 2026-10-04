@@ -19,6 +19,7 @@ export type Settings = {
   theme: 'system' | 'light' | 'dark';
   accent: AccentKey;
   dailyGoal: number;
+  notify?: { prayer: boolean; daily: boolean; dailyHour: number };
   prayer: {
     lat?: number;
     lng?: number;

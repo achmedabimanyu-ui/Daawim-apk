@@ -6,6 +6,7 @@ import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { syncNotifications } from '@/lib/notify';
 import { useTheme } from '@/lib/theme';
 import { useApp } from '@/store/app';
 
@@ -24,6 +25,11 @@ export default function RootLayout() {
   useEffect(() => {
     if (ready) SplashScreen.hideAsync().catch(() => {});
   }, [ready]);
+
+  const settings = useApp((s) => s.settings);
+  useEffect(() => {
+    if (hydrated) syncNotifications(settings).catch(() => {});
+  }, [hydrated, settings.notify, settings.prayer, settings.lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!ready) return null;
   return (
