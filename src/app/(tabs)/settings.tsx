@@ -163,10 +163,10 @@ export default function SettingsScreen() {
             }
           />
         </Card>
-        <View style={{ marginTop: 24 }}>
+        <View style={{ marginTop: 28 }}>
           <ElKisaiCTA />
         </View>
-        <Txt w="regular" size={12} color={th.faint} style={{ textAlign: 'center', marginTop: 24 }}>Daawim v1.0 · offline-first</Txt>
+        <Txt w="regular" size={11} color={th.faint} style={{ textAlign: 'center', marginTop: 10 }}>Daawim v1.0 · offline-first</Txt>
       </ScrollView>
     </SafeAreaView>
   );

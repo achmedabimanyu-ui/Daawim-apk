@@ -12,20 +12,20 @@ export type AccentKey = keyof typeof accents;
 const light = {
   bg: '#FFFFFF',
   card: '#FFFFFF',
-  sunk: '#F6F7F9',
-  border: '#E6E8EC',
-  text: '#2F3437',
-  muted: '#8A9099',
-  faint: '#C3C8CF',
+  sunk: '#F5F6F8',
+  border: '#E9EBEF',
+  text: '#2B3035',
+  muted: '#7D848D',
+  faint: '#BCC2C9',
 };
 const dark = {
-  bg: '#121619',
-  card: '#1A2024',
-  sunk: '#20272C',
-  border: '#2E363C',
-  text: '#ECEFF1',
-  muted: '#8E979F',
-  faint: '#4A535A',
+  bg: '#101417',
+  card: '#1B2226',
+  sunk: '#1B2226',
+  border: '#2C353B',
+  text: '#F4F6F7',
+  muted: '#B3BCC4',
+  faint: '#78838C',
 };
 
 export const fixed = {
@@ -45,6 +45,15 @@ export function useTheme() {
   const mode = useApp((s) => s.settings.theme);
   const accentKey = useApp((s) => s.settings.accent);
   const isDark = mode === 'system' ? scheme === 'dark' : mode === 'dark';
-  return { ...(isDark ? dark : light), ...fixed, accent: accents[accentKey], isDark };
+  const acc = accents[accentKey];
+  if (!isDark) return { ...light, ...fixed, accent: acc, isDark };
+  return {
+    ...dark,
+    ...fixed,
+    flameSoft: 'rgba(255,138,61,0.18)',
+    iceSoft: 'rgba(79,180,245,0.18)',
+    accent: { main: acc.main, dark: acc.dark, soft: `${acc.main}2E` },
+    isDark,
+  };
 }
 export type Theme = ReturnType<typeof useTheme>;

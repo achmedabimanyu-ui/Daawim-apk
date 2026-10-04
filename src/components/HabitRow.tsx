@@ -31,7 +31,7 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
     ring.value = withTiming(p, { duration: 450 });
   }, [p, ring]);
   const bubble = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  const R = 22;
+  const R = 18;
   const C = 2 * Math.PI * R;
   const ringProps = useAnimatedProps(() => ({ strokeDashoffset: C * (1 - ring.value) }));
 
@@ -48,16 +48,15 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
     <Pressable
       onPress={() => onOpen(habit)}
       style={{
-        flexDirection: rtl ? 'row-reverse' : 'row', alignItems: 'center', gap: 14, paddingVertical: 12, paddingHorizontal: 14,
-        backgroundColor: done ? th.accent.soft : th.card, borderRadius: 18, borderWidth: 2,
-        borderColor: done ? th.accent.main : th.border, borderBottomWidth: 4, marginBottom: 10,
+        flexDirection: rtl ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 12,
+        backgroundColor: done ? th.accent.soft : th.sunk, borderRadius: 20, marginBottom: 8,
       }}
     >
-      <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: done ? th.accent.main : th.sunk, alignItems: 'center', justifyContent: 'center' }}>
-        <HabitIcon name={habit.icon} color={done ? '#fff' : th.muted} />
+      <View style={{ width: 38, height: 38, borderRadius: 12, backgroundColor: done ? th.accent.main : th.card, alignItems: 'center', justifyContent: 'center' }}>
+        <HabitIcon name={habit.icon} size={19} color={done ? '#fff' : th.accent.main} />
       </View>
       <View style={{ flex: 1 }}>
-        <Txt size={16} style={{ textAlign: rtl ? 'right' : 'left' }}>{habitName(habit, lang)}</Txt>
+        <Txt size={15} style={{ textAlign: rtl ? 'right' : 'left' }}>{habitName(habit, lang)}</Txt>
         <Txt w="regular" size={13} color={th.muted} numberOfLines={1} style={{ textAlign: rtl ? 'right' : 'left' }}>
           {habit.kind === 'count'
             ? `${entry?.value ?? 0} / ${habit.target} ${unitLabel(habit.unit, t)}${detail ? ' · ' + detail : ''}`
@@ -65,13 +64,13 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
         </Txt>
       </View>
       <Pressable hitSlop={8} onPress={tap}>
-        <Animated.View style={[{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }, bubble]}>
-          <Svg width={50} height={50} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
-            <Circle cx={25} cy={25} r={R} stroke={th.border} strokeWidth={4} fill="none" />
-            <ACircle cx={25} cy={25} r={R} stroke={th.accent.main} strokeWidth={4} fill="none" strokeLinecap="round" strokeDasharray={C} animatedProps={ringProps} />
+        <Animated.View style={[{ width: 42, height: 42, alignItems: 'center', justifyContent: 'center' }, bubble]}>
+          <Svg width={42} height={42} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
+            <Circle cx={21} cy={21} r={R} stroke={th.border} strokeWidth={3.5} fill="none" />
+            <ACircle cx={21} cy={21} r={R} stroke={th.accent.main} strokeWidth={3.5} fill="none" strokeLinecap="round" strokeDasharray={C} animatedProps={ringProps} />
           </Svg>
-          <View style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? th.accent.main : 'transparent' }}>
-            {done ? <Check color="#fff" size={22} strokeWidth={4} /> : habit.kind === 'count' ? <Plus color={th.muted} size={20} strokeWidth={3} /> : null}
+          <View style={{ width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? th.accent.main : 'transparent' }}>
+            {done ? <Check color="#fff" size={18} strokeWidth={4} /> : habit.kind === 'count' ? <Plus color={th.muted} size={16} strokeWidth={3} /> : null}
           </View>
         </Animated.View>
       </Pressable>

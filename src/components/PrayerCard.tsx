@@ -57,11 +57,11 @@ export function PrayerCard() {
   const cd = `${pad(Math.floor(left / 3600))}:${pad(Math.floor((left % 3600) / 60))}:${pad(left % 60)}`;
 
   return (
-    <View style={{ borderRadius: 22, backgroundColor: th.accent.main, borderBottomWidth: 5, borderColor: th.accent.dark, padding: 18 }}>
+    <View style={{ borderRadius: 24, backgroundColor: th.accent.main, padding: 16 }}>
       <View style={{ flexDirection: rtl ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <View>
           <Txt w="bold" size={13} color="rgba(255,255,255,0.85)">{t('nextPrayer')}</Txt>
-          <Txt w="black" size={28} color="#fff">{t(np.name)}</Txt>
+          <Txt w="black" size={22} color="#fff">{t(np.name)}</Txt>
           <Txt w="bold" size={14} color="rgba(255,255,255,0.9)">{fmtTime(np.at)} · {t('in')} {cd}</Txt>
         </View>
         {p.city && (
@@ -71,7 +71,7 @@ export function PrayerCard() {
           </View>
         )}
       </View>
-      <View style={{ flexDirection: rtl ? 'row-reverse' : 'row', justifyContent: 'space-between', marginTop: 16, backgroundColor: 'rgba(0,0,0,0.12)', borderRadius: 14, padding: 10 }}>
+      <View style={{ flexDirection: rtl ? 'row-reverse' : 'row', justifyContent: 'space-between', marginTop: 12, backgroundColor: 'rgba(0,0,0,0.12)', borderRadius: 14, padding: 10 }}>
         {PRAYERS.map((k) => {
           const on = k === np.name;
           return (

@@ -1,7 +1,6 @@
-import { router } from 'expo-router';
-import { Check, ChevronLeft, TrendingDown, TrendingUp, X } from 'lucide-react-native';
+import { Check, TrendingDown, TrendingUp, X } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withDelay, withSpring } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Flame } from '@/components/Flame';
@@ -201,12 +200,9 @@ export default function Insights() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: th.bg }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 16 }}>
-        <Pressable hitSlop={10} onPress={() => router.back()}>
-          <ChevronLeft color={th.muted} size={28} strokeWidth={3} />
-        </Pressable>
-        <Txt w="black" size={22} style={{ flex: 1 }}>{t('insights')}</Txt>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: th.bg }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 12 }}>
+        <Txt w="black" size={28} style={{ flex: 1 }}>{t('insights')}</Txt>
         <Flame size={28} lit={st.todayDone} animate={false} />
         <Txt w="black" size={18} color={st.todayDone ? th.flame : th.muted}>{st.current}</Txt>
       </View>

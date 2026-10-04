@@ -41,7 +41,7 @@ export function Txt({
   return (
     <Text
       {...rest}
-      style={[{ fontFamily: family, fontSize: size, color: color ?? th.text, writingDirection: rtl ? 'rtl' : 'ltr' }, style]}
+      style={[{ fontFamily: family, fontSize: Math.round(size * 0.88), color: color ?? th.text, writingDirection: rtl ? 'rtl' : 'ltr' }, style]}
     />
   );
 }
@@ -49,7 +49,7 @@ export function Txt({
 export function Card({ children, style, pad = 16 }: { children: ReactNode; style?: StyleProp<ViewStyle>; pad?: number }) {
   const th = useTheme();
   return (
-    <View style={[{ backgroundColor: th.card, borderColor: th.border, borderWidth: 2, borderRadius: 20, padding: pad }, style]}>
+    <View style={[{ backgroundColor: th.sunk, borderRadius: 24, padding: pad }, style]}>
       {children}
     </View>
   );
@@ -165,25 +165,24 @@ export function Segmented<T extends string>({
 }) {
   const th = useTheme();
   return (
-    <View style={{ flexDirection: 'row', gap: 8 }}>
+    <View style={{ flexDirection: 'row', backgroundColor: th.isDark ? th.bg : '#ECEEF1', borderRadius: 100, padding: 4 }}>
       {options.map((o) => {
         const on = o.key === value;
         return (
-          <Press3D
+          <Pressable
             key={o.key}
-            style={{ flex: 1 }}
-            color={on ? th.accent.soft : th.card}
-            edge={on ? th.accent.main : th.border}
-            depth={3}
-            radius={14}
-            onPress={() => onChange(o.key)}
+            onPress={() => {
+              Haptics.selectionAsync().catch(() => {});
+              onChange(o.key);
+            }}
+            style={{
+              flex: 1, paddingVertical: 8, alignItems: 'center', borderRadius: 100,
+              backgroundColor: on ? (th.isDark ? '#38434A' : th.card) : 'transparent',
+              shadowColor: '#000', shadowOpacity: on ? 0.08 : 0, shadowRadius: 6, shadowOffset: { width: 0, height: 2 }, elevation: on ? 2 : 0,
+            }}
           >
-            <View style={{ paddingVertical: 10, alignItems: 'center', borderWidth: 2, borderRadius: 14, borderColor: on ? th.accent.main : th.border }}>
-              <Txt size={14} color={on ? th.accent.dark : th.muted}>
-                {o.label}
-              </Txt>
-            </View>
-          </Press3D>
+            <Txt size={14} color={on ? th.text : th.muted}>{o.label}</Txt>
+          </Pressable>
         );
       })}
     </View>
@@ -192,8 +191,8 @@ export function Segmented<T extends string>({
 
 export function SectionTitle({ children, right }: { children: ReactNode; right?: ReactNode }) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 24, marginBottom: 12 }}>
-      <Txt w="black" size={20}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 22, marginBottom: 10 }}>
+      <Txt w="black" size={18}>
         {children}
       </Txt>
       {right}
@@ -202,5 +201,5 @@ export function SectionTitle({ children, right }: { children: ReactNode; right?:
 }
 
 const s = StyleSheet.create({
-  btn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 14, paddingHorizontal: 18 },
+  btn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 12, paddingHorizontal: 16 },
 });
