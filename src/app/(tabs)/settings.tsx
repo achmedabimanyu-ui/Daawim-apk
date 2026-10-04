@@ -9,7 +9,7 @@ import { detectLocation } from '@/components/PrayerCard';
 import { Card, Segmented, SectionTitle, Txt } from '@/components/ui';
 import { exportData, importData } from '@/lib/backup';
 import { useT } from '@/lib/i18n';
-import { askPermission, notifyDefaults } from '@/lib/notify';
+import { askPermission, notifyDefaults, notifySupported } from '@/lib/notify';
 import { methods } from '@/lib/prayer';
 import { accents, useTheme, type AccentKey } from '@/lib/theme';
 import { useApp } from '@/store/app';
@@ -34,6 +34,7 @@ export default function SettingsScreen() {
   const notify = { ...notifyDefaults, ...settings.notify };
   const toggleNotify = async (key: 'prayer' | 'daily', v: boolean) => {
     if (v) {
+      if (!notifySupported) return Alert.alert(t('notifNeedBuild'));
       if (key === 'prayer' && settings.prayer.lat == null) return Alert.alert(t('needLocation'));
       if (!(await askPermission())) return Alert.alert(t('notifDenied'));
     }

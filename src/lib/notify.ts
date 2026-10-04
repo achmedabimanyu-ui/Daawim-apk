@@ -1,4 +1,4 @@
-import * as Notifications from 'expo-notifications';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { Platform } from 'react-native';
 import { addDays, todayKey } from './date';
 import { dicts } from './i18n';
@@ -7,12 +7,23 @@ import type { Settings } from '@/store/app';
 
 export const notifyDefaults = { prayer: false, daily: false, dailyHour: 20 };
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: true, shouldSetBadge: false }),
-});
+export const notifySupported =
+  Platform.OS !== 'web' && Constants.executionEnvironment !== ExecutionEnvironment.StoreClient;
+
+let mod: typeof import('expo-notifications') | null = null;
+function load() {
+  if (!mod) {
+    mod = require('expo-notifications') as typeof import('expo-notifications');
+    mod.setNotificationHandler({
+      handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: true, shouldSetBadge: false }),
+    });
+  }
+  return mod;
+}
 
 export async function askPermission() {
-  if (Platform.OS === 'web') return false;
+  if (!notifySupported) return false;
+  const Notifications = load();
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('default', {
       name: 'Daawim',
@@ -25,7 +36,8 @@ export async function askPermission() {
 }
 
 export async function syncNotifications(settings: Settings) {
-  if (Platform.OS === 'web') return;
+  if (!notifySupported) return;
+  const Notifications = load();
   const n = { ...notifyDefaults, ...settings.notify };
   await Notifications.cancelAllScheduledNotificationsAsync();
   if (!n.prayer && !n.daily) return;
