@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import Animated, {
-  Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming,
+  Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withDelay, withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 import { addDays, fromKey, monthKeys, rangeKeys, todayKey } from '@/lib/date';
@@ -19,12 +19,12 @@ export function ProgressHero({ value, label, size = 168 }: { value: number; labe
   const inner = size - 40;
   const C = 2 * Math.PI * R;
   const p = useSharedValue(0);
-  const pop = useSharedValue(0.85);
+  const pop = useSharedValue(0.97);
   useEffect(() => {
     p.value = withTiming(value, { duration: 900, easing: Easing.out(Easing.cubic) });
   }, [value, p]);
   useEffect(() => {
-    pop.value = withSpring(1, { damping: 9, stiffness: 140 });
+    pop.value = withTiming(1, { duration: 400, easing: Easing.out(Easing.cubic) });
   }, [pop]);
   const ring = useAnimatedProps(() => ({ strokeDashoffset: C * (1 - Math.max(0.02, p.value)) }));
   const scale = useAnimatedStyle(() => ({ transform: [{ scale: pop.value }] }));
@@ -46,7 +46,7 @@ function Bar({ value, i, color, label, top }: { value: number; i: number; color:
   const th = useTheme();
   const h = useSharedValue(0);
   useEffect(() => {
-    h.value = withDelay(i * 50, withSpring(value, { damping: 14 }));
+    h.value = withDelay(i * 30, withTiming(value, { duration: 450, easing: Easing.out(Easing.cubic) }));
   }, [value, i, h]);
   const st = useAnimatedStyle(() => ({ height: Math.max(value > 0 ? 8 : 0, h.value * 96) }));
   return (

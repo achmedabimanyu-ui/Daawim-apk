@@ -1,7 +1,7 @@
 import { Check, TrendingDown, TrendingUp, X } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withDelay, withSpring } from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Flame } from '@/components/Flame';
 import { StreakCalendar } from '@/components/StreakCalendar';
@@ -17,7 +17,7 @@ function Bar({ value, i, color, label }: { value: number; i: number; color: stri
   const th = useTheme();
   const h = useSharedValue(0);
   useEffect(() => {
-    h.value = withDelay(i * 40, withSpring(value, { damping: 14 }));
+    h.value = withDelay(i * 30, withTiming(value, { duration: 450, easing: Easing.out(Easing.cubic) }));
   }, [value, i, h]);
   const st = useAnimatedStyle(() => ({ height: `${Math.max(4, h.value * 100)}%` }));
   return (

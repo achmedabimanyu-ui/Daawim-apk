@@ -14,8 +14,8 @@ export function Flame({ size = 64, lit = true, animate = true }: { size?: number
     if (!animate || !lit) return;
     t.value = withRepeat(
       withSequence(
-        withTiming(1, { duration: 900, easing: Easing.inOut(Easing.sin) }),
-        withTiming(0, { duration: 900, easing: Easing.inOut(Easing.sin) }),
+        withTiming(1, { duration: 1800, easing: Easing.inOut(Easing.sin) }),
+        withTiming(0, { duration: 1800, easing: Easing.inOut(Easing.sin) }),
       ),
       -1,
     );
@@ -23,9 +23,9 @@ export function Flame({ size = 64, lit = true, animate = true }: { size?: number
   const style = useAnimatedStyle(() => ({
     transform: [
       { translateY: size * 0.45 },
-      { scaleY: 1 + t.value * 0.05 },
-      { scaleX: 1 - t.value * 0.02 },
-      { rotate: `${(t.value - 0.5) * 3}deg` },
+      { scaleY: 1 + t.value * 0.02 },
+      { scaleX: 1 - t.value * 0.008 },
+      { rotate: `${(t.value - 0.5) * 1}deg` },
       { translateY: -size * 0.45 },
     ],
   }));

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react-native';
 import { useEffect, type ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View, type StyleProp, type TextProps, type TextStyle, type ViewStyle } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/theme';
 
@@ -96,11 +96,11 @@ export function Press3D({
     <Pressable
       disabled={disabled}
       onPressIn={() => {
-        sc.value = withTiming(0.96, { duration: 90 });
+        sc.value = withTiming(0.98, { duration: 100 });
         if (haptic) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
       }}
       onPressOut={() => {
-        sc.value = withSpring(1, { damping: 10, stiffness: 300 });
+        sc.value = withTiming(1, { duration: 160 });
       }}
       onPress={onPress}
       style={[{ opacity: disabled ? 0.5 : 1 }, style]}
@@ -162,7 +162,7 @@ export function ProgressBar({ value, color, height = 14 }: { value: number; colo
   const th = useTheme();
   const w = useSharedValue(0);
   useEffect(() => {
-    w.value = withSpring(Math.max(0, Math.min(1, value)), { damping: 18, stiffness: 120 });
+    w.value = withTiming(Math.max(0, Math.min(1, value)), { duration: 450, easing: Easing.out(Easing.cubic) });
   }, [value, w]);
   const fill = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (

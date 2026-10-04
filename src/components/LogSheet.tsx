@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { Minus, Pencil, Plus } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, TextInput, View } from 'react-native';
-import Animated, { SlideInDown, FadeIn } from 'react-native-reanimated';
+import Animated, { Easing, SlideInDown, FadeIn } from 'react-native-reanimated';
 import type { Habit } from '@/lib/defaults';
 import { habitName, unitLabel } from '@/lib/labels';
 import { useT, type Dict } from '@/lib/i18n';
@@ -48,7 +48,7 @@ export function LogSheet({ habit, date, onClose }: { habit: Habit | null; date: 
         <Animated.View entering={FadeIn} style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' }}>
           <Pressable style={{ flex: 1 }} onPress={onClose} />
           <Animated.View
-            entering={SlideInDown.springify().damping(18)}
+            entering={SlideInDown.duration(280).easing(Easing.out(Easing.cubic))}
             style={{ backgroundColor: th.bg, borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 20, paddingBottom: 36 }}
           >
             <View style={{ alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: th.border, marginBottom: 16 }} />

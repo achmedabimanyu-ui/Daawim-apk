@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { ChevronLeft, Moon, Sparkles } from 'lucide-react-native';
 import { useState, type ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, TextInput, View } from 'react-native';
-import Animated, { FadeInDown, FadeInRight, ZoomIn } from 'react-native-reanimated';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ElKisaiCTA } from '@/components/ElKisaiCTA';
 import { Flame } from '@/components/Flame';
@@ -41,15 +41,15 @@ export default function Onboarding() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: th.bg, padding: 24 }}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Animated.View entering={ZoomIn.springify().damping(9)}>
+          <Animated.View entering={FadeIn.duration(500)}>
             <Flame size={140} />
           </Animated.View>
-          <Animated.View entering={FadeInDown.delay(250)}>
+          <Animated.View entering={FadeIn.delay(150).duration(400)}>
             <Txt w="black" size={46} color={th.accent.main} style={{ textAlign: 'center', marginTop: 16, letterSpacing: -1 }}>daawim</Txt>
             <Txt w="bold" size={17} color={th.muted} style={{ textAlign: 'center', marginTop: 6 }}>{t('appTagline')}</Txt>
           </Animated.View>
         </View>
-        <Animated.View entering={FadeInDown.delay(500)}>
+        <Animated.View entering={FadeIn.delay(300).duration(400)}>
           <Button label={t('getStarted')} onPress={next} />
           <View style={{ marginTop: 18 }}>
             <ElKisaiCTA />
@@ -77,7 +77,7 @@ export default function Onboarding() {
           </View>
         </View>
 
-        <Animated.View key={step} entering={FadeInRight.springify().damping(16)} style={{ flex: 1, gap: 12 }}>
+        <Animated.View key={step} entering={FadeIn.duration(250)} style={{ flex: 1, gap: 12 }}>
           {step === 1 && (
             <>
               <Txt w="black" size={26} style={{ marginBottom: 12 }}>{t('chooseLang')}</Txt>

@@ -18,7 +18,7 @@ function TabButton({ name, label, focused, onPress }: { name: keyof typeof ICONS
   return (
     <Pressable onPress={onPress} style={{ flex: focused ? 2.2 : 1, alignItems: 'center', paddingVertical: 8 }}>
       <Animated.View
-        layout={LinearTransition.springify().damping(16)}
+        layout={LinearTransition.duration(200)}
         style={{
           flexDirection: 'row', alignItems: 'center', gap: 6, height: 40, borderRadius: 100,
           paddingHorizontal: focused ? 14 : 10, backgroundColor: focused ? `${color}22` : 'transparent',
@@ -26,7 +26,7 @@ function TabButton({ name, label, focused, onPress }: { name: keyof typeof ICONS
       >
         <I color={focused ? color : th.muted} size={21} strokeWidth={2.4} />
         {focused && (
-          <Animated.View entering={FadeIn.duration(180)} exiting={FadeOut.duration(80)}>
+          <Animated.View entering={FadeIn.duration(150)} exiting={FadeOut.duration(80)}>
             <Txt w="bold" size={14} color={color} numberOfLines={1}>{label}</Txt>
           </Animated.View>
         )}

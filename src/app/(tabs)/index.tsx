@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { ChevronRight, Moon, Sun, Sunrise, Sunset } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Image, Pressable, ScrollView, View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Celebration } from '@/components/Celebration';
 import { MonthDots, ProgressChart, ProgressHero, StatTile } from '@/components/DashboardParts';
@@ -87,7 +87,7 @@ export default function Dashboard() {
           <WeekStrip onChange={() => router.navigate('/(tabs)/habits')} />
         </View>
 
-        <Animated.View entering={FadeInDown.springify().damping(16)}>
+        <Animated.View entering={FadeIn.duration(300)}>
           <Card pad={18} style={{ marginTop: 18, borderRadius: 28 }}>
             <View style={{ flexDirection: row, alignItems: 'center', gap: 14 }}>
               <View style={{ flex: 1 }}>
@@ -168,7 +168,7 @@ export default function Dashboard() {
         </View>
         {next.length ? (
           next.map((h, i) => (
-            <Animated.View key={h.id} entering={FadeInDown.delay(i * 60).springify().damping(16)}>
+            <Animated.View key={h.id} entering={FadeIn.duration(250)}>
               <HabitRow habit={h} date={today} onOpen={setOpen} />
             </Animated.View>
           ))

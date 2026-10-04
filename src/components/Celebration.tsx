@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useEffect } from 'react';
 import { Modal, Pressable, View } from 'react-native';
-import Animated, { Easing, FadeIn, FadeInUp, SlideInDown } from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, SlideInDown } from 'react-native-reanimated';
 import { fromKey, rangeKeys, todayKey } from '@/lib/date';
 import { useT, weekdayShort } from '@/lib/i18n';
 import { dayStatus } from '@/lib/stats';
@@ -27,7 +27,7 @@ export function Celebration({ visible, streak, onClose }: { visible: boolean; st
       <Animated.View entering={FadeIn.duration(250)} style={{ flex: 1, backgroundColor: 'rgba(10,14,20,0.35)', justifyContent: 'flex-end' }}>
         <Pressable style={{ flex: 1 }} onPress={onClose} />
         <Animated.View
-          entering={SlideInDown.duration(380).easing(ease)}
+          entering={SlideInDown.duration(300).easing(ease)}
           style={{ backgroundColor: th.card, borderTopLeftRadius: 28, borderTopRightRadius: 28, paddingHorizontal: 24, paddingTop: 14, paddingBottom: 34 }}
         >
           <View style={{ alignSelf: 'center', width: 40, height: 5, borderRadius: 3, backgroundColor: th.border, marginBottom: 18 }} />
@@ -54,7 +54,7 @@ export function Celebration({ visible, streak, onClose }: { visible: boolean; st
                 <View key={k} style={{ alignItems: 'center', gap: 6 }}>
                   <Txt w="bold" size={11} color={th.muted}>{weekdayShort[lang][fromKey(k).getDay()]}</Txt>
                   <Animated.View
-                    entering={FadeInUp.delay(250 + i * 60).duration(300).easing(ease)}
+                    entering={FadeIn.delay(150 + i * 40).duration(250)}
                     style={{
                       width: 26, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center',
                       backgroundColor: on ? (st === 'udzur' ? th.ice : th.flame) : th.card,

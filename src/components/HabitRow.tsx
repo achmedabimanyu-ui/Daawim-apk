@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, View } from 'react-native';
 import Animated, {
-  Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming,
+  Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 import type { Habit } from '@/lib/defaults';
@@ -38,7 +38,7 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
 
   const tap = () => {
     if (habit.kind === 'count') return onOpen(habit);
-    scale.value = withSequence(withTiming(0.9, { duration: 90 }), withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) }));
+    scale.value = withSequence(withTiming(0.94, { duration: 90 }), withTiming(1, { duration: 160, easing: Easing.out(Easing.quad) }));
     Haptics.notificationAsync(done ? Haptics.NotificationFeedbackType.Warning : Haptics.NotificationFeedbackType.Success).catch(() => {});
     setEntry(date, habit.id, done ? null : { value: 1 });
   };
@@ -53,8 +53,8 @@ export function HabitRow({ habit, date, onOpen }: { habit: Habit; date: string; 
     <Animated.View style={[{ marginBottom: 12 }, card]}>
       <Pressable
         onPress={() => onOpen(habit)}
-        onPressIn={() => (press.value = withTiming(0.98, { duration: 90 }))}
-        onPressOut={() => (press.value = withSpring(1, { damping: 12 }))}
+        onPressIn={() => (press.value = withTiming(0.99, { duration: 100 }))}
+        onPressOut={() => (press.value = withTiming(1, { duration: 160 }))}
       >
         <LinearGradient
           colors={[pc.from, pc.to]}

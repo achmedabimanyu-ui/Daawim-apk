@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Droplets, Minus, Plus, UtensilsCrossed } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import Animated, { FadeInDown, ZoomIn } from 'react-native-reanimated';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, ProgressBar, Press3D, SectionTitle, Txt } from '@/components/ui';
 import { addDays, diffDays, fromKey, monthKeys, todayKey } from '@/lib/date';
@@ -66,8 +66,8 @@ export default function Haidh() {
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 32 }} showsVerticalScrollIndicator={false}>
         <Txt w="black" size={28}>{t('haidhTracker')}</Txt>
 
-        <Animated.View entering={FadeInDown.springify().damping(16)} style={{ marginTop: 16, borderRadius: 24, backgroundColor: ROSE, borderBottomWidth: 5, borderColor: ROSE_D, padding: 20, alignItems: 'center' }}>
-          <Animated.View entering={ZoomIn.delay(150).springify()} style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(255,255,255,0.25)', alignItems: 'center', justifyContent: 'center' }}>
+        <Animated.View entering={FadeIn.duration(300)} style={{ marginTop: 16, borderRadius: 24, backgroundColor: ROSE, borderBottomWidth: 5, borderColor: ROSE_D, padding: 20, alignItems: 'center' }}>
+          <Animated.View entering={FadeIn.delay(100).duration(300)} style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(255,255,255,0.25)', alignItems: 'center', justifyContent: 'center' }}>
             <Droplets color="#fff" size={32} strokeWidth={2.6} />
           </Animated.View>
           {current ? (
